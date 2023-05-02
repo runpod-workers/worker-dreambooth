@@ -34,8 +34,6 @@ COPY builder/model_fetcher.sh /src/model_fetcher.sh
 RUN sh /src/model_fetcher.sh
 RUN rm /src/model_fetcher.sh
 
-RUN pip install -e /src/diffusers
-
 ENV DEBIAN_FRONTEND noninteractive
 
 CMD [ "python", "-u", "/rp_handler.py" ]

@@ -32,7 +32,7 @@ RUN cd /workspace/sd/stable-diffusion-webui/modules && \
 # Download the models
 COPY builder/model_fetcher.sh /src/model_fetcher.sh
 RUN sh /src/model_fetcher.sh
-RUM rm /src/model_fetcher.sh
+RUN rm /src/model_fetcher.sh
 
 RUN pip install -e /src/diffusers
 

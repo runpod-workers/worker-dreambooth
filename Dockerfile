@@ -21,7 +21,7 @@ ADD src .
 
 # Run the install script
 COPY builder/install.py /src/install.py
-RUN python -u install.py
+RUN python -u /src/install.py
 RUN rm /src/install.py
 
 # Replace paths.py with the one that works with the new paths

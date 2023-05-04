@@ -2,7 +2,7 @@ FROM runpod/pytorch:3.10-2.0.0-117
 
 SHELL ["/bin/bash", "-c"]
 
-WORKDIR /src
+WORKDIR /workspace
 
 # Install missing dependencies
 RUN apt-get update && \
@@ -17,12 +17,12 @@ RUN pip install --upgrade pip && \
     pip install -r /requirements.txt && \
     rm /requirements.txt
 
-ADD src .
+ADD workspace .
 
 # Run the install script
-COPY builder/install.py /src/install.py
-RUN python -u /src/install.py
-RUN rm /src/install.py
+COPY builder/install.py /workspace/install.py
+RUN python -u /workspace/install.py
+RUN rm /workspace/install.py
 
 # Replace paths.py with the one that works with the new paths
 RUN cd /workspace/sd/stable-diffusion-webui/modules && \
@@ -30,9 +30,9 @@ RUN cd /workspace/sd/stable-diffusion-webui/modules && \
     sed -i 's@/content/gdrive/MyDrive/sd/stablediffusion@/workspace/sd/stablediffusion@' /workspace/sd/stable-diffusion-webui/modules/paths.py
 
 # Download the models
-COPY builder/model_fetcher.sh /src/model_fetcher.sh
-RUN sh /src/model_fetcher.sh
-RUN rm /src/model_fetcher.sh
+COPY builder/model_fetcher.sh /workspace/model_fetcher.sh
+RUN sh /workspace/model_fetcher.sh
+RUN rm /workspace/model_fetcher.sh
 
 ENV DEBIAN_FRONTEND noninteractive
 

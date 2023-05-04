@@ -166,10 +166,10 @@ def handler(job):
     # Convert to CKPT
     diffusers_to_ckpt = subprocess.Popen(
         [
-            "python", "/src/diffusers/scripts/convertosdv2.py",
+            "python", "/workspace/diffusers/scripts/convertosdv2.py",
             "--fp16",
-            f"/src/job_files/{job['id']}/model",
-            f"/src/job_files/{job['id']}/{job['id']}.ckpt"
+            f"/workspace/job_files/{job['id']}/model",
+            f"/workspace/job_files/{job['id']}/{job['id']}.ckpt"
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
@@ -182,7 +182,7 @@ def handler(job):
         print(f"Converting to ckpt stdout: {stdout.decode('utf-8')}")
         return {"error": f"Error converting to CKPT: {stderr.decode('utf-8')}"}
 
-    trained_ckpt = f"/src/job_files/{job['id']}/{job['id']}.ckpt"
+    trained_ckpt = f"/workspace/job_files/{job['id']}/{job['id']}.ckpt"
 
     # --------------------------------- Inference -------------------------------- #
     if 'inference' in job_input:

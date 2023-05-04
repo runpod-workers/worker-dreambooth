@@ -15,7 +15,7 @@ def dump_only_textenc(
     Train the text encoder first.
     '''
     text_options = [
-        "accelerate", "launch", "/src/diffusers/examples/dreambooth/train_dreambooth_rnpdendpt.py",
+        "accelerate", "launch", "/workspace/diffusers/examples/dreambooth/train_dreambooth_rnpdendpt.py",
         "--train_text_encoder",
         "--dump_only_text_encoder",
         f"--pretrained_model_name_or_path={model_name}",
@@ -56,7 +56,7 @@ def train_only_unet(
     Train only the image encoder.
     '''
     unet_options = [
-        "accelerate", "launch", "/src/diffusers/examples/dreambooth/train_dreambooth_rnpdendpt.py",
+        "accelerate", "launch", "/workspace/diffusers/examples/dreambooth/train_dreambooth_rnpdendpt.py",
         "--image_captions_filename",
         "--train_only_unet",
         f"--save_n_steps={stp}",

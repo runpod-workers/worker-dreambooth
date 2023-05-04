@@ -17,7 +17,7 @@ def downloadmodel_hf(Path_to_HuggingFace, huggingface_token=None):
     else:
         auth = "https://"
 
-    custom_path = '/src/stable-diffusion-custom'
+    custom_path = '/workspace/stable-diffusion-custom'
     os.makedirs(custom_path, exist_ok=True)
 
     print(f"Current working directory: {os.getcwd()}")
@@ -45,10 +45,10 @@ def downloadmodel_hf(Path_to_HuggingFace, huggingface_token=None):
         call("rm model_index.json", shell=True)
         wget.download(
             'https://raw.githubusercontent.com/TheLastBen/fast-stable-diffusion/main/Dreambooth/model_index.json')
-        os.chdir('/src')
+        os.chdir('/workspace')
 
-    while not os.path.exists('/src/stable-diffusion-custom/unet/diffusion_pytorch_model.bin'):
-        os.chdir('/src')
+    while not os.path.exists('/workspace/stable-diffusion-custom/unet/diffusion_pytorch_model.bin'):
+        os.chdir('/workspace')
 
     print("Downloaded model is compatible with DreamBooth.")
 
@@ -68,13 +68,13 @@ def downloadmodel_lnk(ckpt_link):
     if os.path.exists('model.ckpt') and os.path.getsize("model.ckpt") > 1810671599:
         # wget.download('https://github.com/TheLastBen/fast-stable-diffusion/raw/main/Dreambooth/det.py')
         # custom_model_version = check_output(
-        #     'python det.py --MODEL_PATH /src/model.ckpt', shell=True).decode('utf-8').replace('\n', '')
+        #     'python det.py --MODEL_PATH /workspace/model.ckpt', shell=True).decode('utf-8').replace('\n', '')
 
         # if custom_model_version == 'v1.5':
         wget.download(
             'https://github.com/CompVis/stable-diffusion/raw/main/configs/stable-diffusion/v1-inference.yaml', 'config.yaml')
         subprocess.run(
-            'python /src/diffusers/scripts/convert_original_stable_diffusion_to_diffusers.py --checkpoint_path /src/model.ckpt --dump_path /src/stable-diffusion-custom --original_config_file config.yaml',
+            'python /workspace/diffusers/scripts/convert_original_stable_diffusion_to_diffusers.py --checkpoint_path /workspace/model.ckpt --dump_path /workspace/stable-diffusion-custom --original_config_file config.yaml',
             shell=True, check=True)
 
         # refmdlz_file = 'refmdlz'
@@ -91,11 +91,11 @@ def downloadmodel_lnk(ckpt_link):
         #     'https://raw.githubusercontent.com/TheLastBen/fast-stable-diffusion/main/Dreambooth/convertodiffv1.py')
 
         # # result = subprocess.run(
-        # #     'python convertodiffv1.py model.ckpt /src/stable-diffusion-custom --v1',
+        # #     'python convertodiffv1.py model.ckpt /workspace/stable-diffusion-custom --v1',
         # #     shell=True, stderr=subprocess.PIPE, check=False
         # # )
         # result = subprocess.run(
-        #     '/src/diffusers/scripts/convert_original_stable_diffusion_to_diffusers.py - -checkpoint_path /src/model.ckpt - -dump_path /src/stable-diffusion-custom - -original_config_file config.yaml ',
+        #     '/workspace/diffusers/scripts/convert_original_stable_diffusion_to_diffusers.py - -checkpoint_path /workspace/model.ckpt - -dump_path /workspace/stable-diffusion-custom - -original_config_file config.yaml ',
         #     shell=True, stderr=subprocess.PIPE, check=False)
 
         # if result.returncode != 0:
@@ -111,15 +111,15 @@ def selected_model(path_to_huggingface=None, ckpt_link=None, huggingface_token=N
     Either download a model from HuggingFace or from a ckpt link.
     Or use the original V1.5 model.
     '''
-    model_name = "/src/stable-diffusion-v1-5"
-    os.makedirs("/src/stable-diffusion-custom", exist_ok=True)
+    model_name = "/workspace/stable-diffusion-v1-5"
+    os.makedirs("/workspace/stable-diffusion-custom", exist_ok=True)
 
     if path_to_huggingface:
         downloadmodel_hf(path_to_huggingface, huggingface_token)
-        model_name = "/src/stable-diffusion-custom"
+        model_name = "/workspace/stable-diffusion-custom"
     elif ckpt_link:
         downloadmodel_lnk(ckpt_link)
-        model_name = "/src/stable-diffusion-custom"
+        model_name = "/workspace/stable-diffusion-custom"
 
     # Modify the config.json file
     result = subprocess.run(

@@ -17,7 +17,7 @@ RUN pip install --upgrade pip && \
     pip install -r /requirements.txt && \
     rm /requirements.txt
 
-ADD workspace .
+ADD src .
 
 # Run the install script
 COPY builder/install.py /workspace/install.py

@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - uses: actions/checkout@v3
@@ -21,7 +21,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends apt-utils zstd git-lfs unzip
-          echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
           curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
 
       - run: |
@@ -49,7 +48,7 @@ jobs:
             {
                 "input": {
                     "train": {
-                        "data_url": "https://github.com/runpod/serverless-workers/raw/main/Input-Samples/froggy.zip",
+                        "data_url": "https://github.com/runpod-workers/sample-inputs/raw/main/images/froggy.zip",
                         "text_steps": 2,
                         "unet_epochs": 1,
                         "concept_name": "wixbs"

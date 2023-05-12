@@ -1,4 +1,4 @@
-runpod==0.9.3
+runpod==0.9.7
 torchvision==0.15.1
 python-slugify==8.0.1
 huggingface-hub==0.13.3

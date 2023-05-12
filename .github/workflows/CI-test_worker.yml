@@ -1,0 +1,72 @@
+name: CI | Test Worker
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends apt-utils zstd git-lfs unzip
+          echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+          curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+
+      - run: |
+          python -m pip install --upgrade pip
+          pip install -r builder/requirements.txt
+
+      - name: Run the install script
+        run: |
+          python -u builder/install.py
+
+      - name: Replace paths.py
+        run: |
+          cd src/stable-diffusion-webui/modules
+          wget -q -O paths.py https://raw.githubusercontent.com/TheLastBen/fast-stable-diffusion/main/AUTOMATIC1111_files/paths.py
+          sed -i 's@/content/gdrive/MyDrive/sd/stablediffusion@/workspace/sd/stablediffusion@' paths.py
+
+      - name: Download the models
+        run: |
+          bash builder/model_fetcher.sh
+
+      - name: Test Worker
+        run: |
+          echo "PYTHONUNBUFFERED=1" >> $GITHUB_ENV
+          python src/rp_handler.py --test_input='
+            {
+                "input": {
+                    "train": {
+                        "data_url": "https://github.com/runpod/serverless-workers/raw/main/Input-Samples/froggy.zip",
+                        "text_steps": 2,
+                        "unet_epochs": 1,
+                        "concept_name": "wixbs"
+                    },
+                    "inference": [
+                        {
+                            "prompt": "wixbs grog wearing Batman costume highly detailed face, symmetrical eyes, colorful, flowing hair, fully visible face, powerful, magic, thunders, dramatic lighting, wild, trending on artstation, intricate details, highly detailed, digital painting, concept art, smooth, sharp focus, illustration, art by artgerm and greg rutkowski and alphonse mucha",
+                            "negative_prompt": "disfigured mouth, disfigured teeth, half head, half face, blury, side looking, old, wrinkle, child, no face, pencil, full body, sharp, far away, overlapping, duplication, nude, disfigured, kitsch, oversaturated, grain, low-res, Deformed, blurry, bad anatomy, poorly drawn face, mutation, mutated, extra limb, ugly, poorly drawn hands, missing limb, blurry, floating limbs, disconnected limbs, malformed hands, blur, out of focus, long body, disgusting, poorly drawn, childish, mutilated, mangled, surreal, out of frame, duplicate, 2 faces",
+                            "steps": 4,
+                            "sampler_name": "DPM++ 2S a Karras"
+                        },
+                        {
+                            "prompt": "wixbs woman frog Batman costume highly detailed face, symmetrical eyes, colorful, flowing hair, fully visible face, powerful, magic, thunders, dramatic lighting, wild, trending on artstation, intricate details, highly detailed, digital painting, concept art, smooth, sharp focus, illustration, art by artgerm and greg rutkowski and alphonse mucha",
+                            "negative_prompt": "disfigured mouth, disfigured teeth, half head, half face, blury, side looking, old, wrinkle, child, no face, pencil, full body, sharp, far away, overlapping, duplication, nude, disfigured, kitsch, oversaturated, grain, low-res, Deformed, blurry, bad anatomy, poorly drawn face, mutation, mutated, extra limb, ugly, poorly drawn hands, missing limb, blurry, floating limbs, disconnected limbs, malformed hands, blur, out of focus, long body, disgusting, poorly drawn, childish, mutilated, mangled, surreal, out of frame, duplicate, 2 faces",
+                            "steps": 4,
+                            "sampler_name": "DPM++ 2S a Karras"
+                        }
+                    ]
+                }
+            }'

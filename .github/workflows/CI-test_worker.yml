@@ -19,9 +19,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends apt-utils zstd git-lfs unzip
-          curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+          apt-get update
+          apt-get install -y --no-install-recommends apt-utils zstd git-lfs unzip
+          curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
 
       - run: |
           python -m pip install --upgrade pip

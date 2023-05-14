@@ -36,7 +36,5 @@ RUN rm /workspace/model_fetcher.sh
 
 ENV DEBIAN_FRONTEND noninteractive
 
-CMD [ "python", "-u", "/rp_handler.py" ]
-
 ENV PYTHONUNBUFFERED=1
 CMD python -u rp_handler.py

@@ -87,7 +87,7 @@ TRAIN_SCHEMA = {
     'unet_resolution': {
         'type': int,
         'required': False,
-        'default': 256
+        'default': 512
     },
     'unet_epochs': {
         'type': int,

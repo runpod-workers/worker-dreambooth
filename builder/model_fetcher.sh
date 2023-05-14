@@ -1,5 +1,5 @@
-mkdir /src/stable-diffusion-v1-5
-cd /src/stable-diffusion-v1-5
+mkdir /workspace/stable-diffusion-v1-5
+cd /workspace/stable-diffusion-v1-5
 git init
 git lfs install --system --skip-repo
 git remote add -f origin  "https://huggingface.co/runwayml/stable-diffusion-v1-5"
